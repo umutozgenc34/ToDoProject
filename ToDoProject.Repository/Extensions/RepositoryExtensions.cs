@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using ToDoProject.Repository.Categories.Abstracts;
+using ToDoProject.Repository.Categories.Concretes;
 using ToDoProject.Repository.Contexts;
 using ToDoProject.Repository.ToDos.Abstracts;
 using ToDoProject.Repository.ToDos.Concretes;
@@ -29,6 +31,7 @@ public static class RepositoryExtensions
         });
 
         services.AddScoped<IToDoRepository, ToDoRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         return services;

@@ -6,6 +6,8 @@ using System.Reflection;
 using ToDoProject.Repository.Contexts;
 using ToDoProject.Repository.ToDos.Abstracts;
 using ToDoProject.Repository.ToDos.Concretes;
+using ToDoProject.Service.Categories.Abstracts;
+using ToDoProject.Service.Categories.Concretes;
 using ToDoProject.Service.ToDoS.Abstracts;
 using ToDoProject.Service.ToDoS.Concretes;
 
@@ -15,6 +17,7 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<ICategoryService,CategoryService>();
         services.AddScoped<IToDoService, ToDoService>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         return services;
