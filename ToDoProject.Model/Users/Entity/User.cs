@@ -11,9 +11,9 @@ namespace ToDoProject.Model.Users.Entity;
 public sealed class User : BaseEntity<int>
 {
     // şimdilik
-    public DateTime BirthDate { get; set; }
+    //public DateTime BirthDate { get; set; }
 
-    public List<ToDo> ToDos { get; set; }
+    //public List<ToDo> ToDos { get; set; }
 
     
 }

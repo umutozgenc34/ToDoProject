@@ -12,7 +12,7 @@ using ToDoProject.Repository.Contexts;
 namespace ToDoProject.Repository.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20241102151008_init")]
+    [Migration("20241103133535_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -77,36 +77,11 @@ namespace ToDoProject.Repository.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("UserId1");
-
                     b.ToTable("ToDos");
-                });
-
-            modelBuilder.Entity("ToDoProject.Model.Users.Entity.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("ToDoProject.Model.ToDos.Entity.ToDo", b =>
@@ -117,23 +92,10 @@ namespace ToDoProject.Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ToDoProject.Model.Users.Entity.User", "User")
-                        .WithMany("ToDos")
-                        .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Category");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ToDoProject.Model.Categories.Entity.Category", b =>
-                {
-                    b.Navigation("ToDos");
-                });
-
-            modelBuilder.Entity("ToDoProject.Model.Users.Entity.User", b =>
                 {
                     b.Navigation("ToDos");
                 });

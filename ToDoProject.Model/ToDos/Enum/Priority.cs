@@ -6,7 +6,7 @@ namespace ToDoProject.Model.ToDos.Enum;
 
 public enum Priority 
 {
-    Low,
-    Normal,
-    High
+    Low =3,
+    Normal=2,
+    High=1
 }

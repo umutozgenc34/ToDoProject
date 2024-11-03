@@ -25,16 +25,6 @@ public class ReturnModel<TData>
         };
     }
 
-    public static ReturnModel<TData> SuccessAsCreated(TData data, string urlAsCreated)
-    {
-        return new ReturnModel<TData>()
-        {
-            Data = data,
-            Status = HttpStatusCode.Created,
-            UrlAsCreated = urlAsCreated
-        };
-    }
-
     public static ReturnModel<TData> Fail(List<string> errorMessage, HttpStatusCode status = HttpStatusCode.BadRequest)
     {
         return new ReturnModel<TData>()
