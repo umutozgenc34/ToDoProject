@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ToDoProject.Repository.Extensions;
 using ToDoProject.Service.Extensions;
 using ToDoProject.Service.Filters;
+using ToDoProject.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +21,13 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddRepositories(builder.Configuration).AddServices(builder.Configuration);
 
+builder.Services.AddExceptionHandler<CriticalExceptionHandler>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 
 var app = builder.Build();
+
+app.UseExceptionHandler(x => { });
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
