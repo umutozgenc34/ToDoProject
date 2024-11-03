@@ -1,5 +1,7 @@
 ﻿
 
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -20,6 +22,10 @@ public static class ServiceExtensions
         services.AddScoped<ICategoryService,CategoryService>();
         services.AddScoped<IToDoService, ToDoService>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+        services.AddFluentValidationAutoValidation();
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
         return services;
     }
 }
