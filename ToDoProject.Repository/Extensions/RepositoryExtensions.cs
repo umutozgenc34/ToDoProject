@@ -5,6 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using ToDoProject.Repository.Contexts;
+using ToDoProject.Repository.ToDos.Abstracts;
+using ToDoProject.Repository.ToDos.Concretes;
+using ToDoProject.Repository.UnitOfWorks.Abstracts;
+using ToDoProject.Repository.UnitOfWorks.Concretes;
+
 
 namespace ToDoProject.Repository.Extensions;
 
@@ -23,6 +28,8 @@ public static class RepositoryExtensions
             });
         });
 
+        services.AddScoped<IToDoRepository, ToDoRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         return services;
     }
