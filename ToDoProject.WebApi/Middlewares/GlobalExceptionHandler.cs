@@ -23,7 +23,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             return true;
         }
 
-        
+
         await WriteResponseAsync(httpContext, ReturnModel.Fail(exception.Message, HttpStatusCode.InternalServerError), cancellationToken);
         return true;
     }

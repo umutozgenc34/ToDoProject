@@ -9,7 +9,9 @@ public record CreateToDoResponseDto(
     string Title,
     string Description,
     Priority Priority,
+    DateTime StartDate,
+    DateTime EndDate,
     bool Completed,
-    string CategoryName
-    
+    string CategoryName,
+    string UserFirstName
 );

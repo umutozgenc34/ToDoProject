@@ -12,6 +12,8 @@ using ToDoProject.Service.Categories.Abstracts;
 using ToDoProject.Service.Categories.Concretes;
 using ToDoProject.Service.ToDoS.Abstracts;
 using ToDoProject.Service.ToDoS.Concretes;
+using ToDoProject.Service.Users.Abstracts;
+using ToDoProject.Service.Users.Concretes;
 
 namespace ToDoProject.Service.Extensions;
 
@@ -21,6 +23,7 @@ public static class ServiceExtensions
     {
         services.AddScoped<ICategoryService,CategoryService>();
         services.AddScoped<IToDoService, ToDoService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         services.AddFluentValidationAutoValidation();

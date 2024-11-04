@@ -7,5 +7,9 @@ public record CreateToDoRequestDto(
     string Description,
     Priority Priority,
     int CategoryId,
-    bool Completed = false
+    Guid UserId,
+    DateTime StartDate,
+    DateTime EndDate,
+    bool Completed
+    
 );

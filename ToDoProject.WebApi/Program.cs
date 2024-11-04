@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ToDoProject.Model.Users.Entity;
+using ToDoProject.Repository.Contexts;
 using ToDoProject.Repository.Extensions;
 using ToDoProject.Service.Extensions;
 using ToDoProject.Service.Filters;
@@ -20,6 +23,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddRepositories(builder.Configuration).AddServices(builder.Configuration);
+
+builder.Services.AddIdentity<User, IdentityRole>(opt =>
+{
+    opt.User.RequireUniqueEmail = true;
+    opt.Password.RequireNonAlphanumeric = false;
+}).AddEntityFrameworkStores<BaseDbContext>();
+
+
 
 builder.Services.AddExceptionHandler<CriticalExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();

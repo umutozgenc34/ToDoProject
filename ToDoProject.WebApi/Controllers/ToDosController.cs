@@ -17,7 +17,7 @@ namespace ToDoProject.WebApi.Controllers
         public async Task<IActionResult> GetById(Guid id) => CreateActionResult(await toDoService.GetByIdAsync(id));
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateToDoRequestDto request) => CreateActionResult(await toDoService.
+        public async Task<IActionResult> Create([FromBody]CreateToDoRequestDto request) => CreateActionResult(await toDoService.
             CreateAsync(request));
 
         [HttpPut("{id:guid}")]
