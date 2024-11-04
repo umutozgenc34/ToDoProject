@@ -1,3 +1,4 @@
+using Core.Tokens.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ToDoProject.Model.Users.Entity;
@@ -23,6 +24,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddRepositories(builder.Configuration).AddServices(builder.Configuration);
+
+builder.Services.Configure<CustomTokenOptions>(builder.Configuration.GetSection("TokenOption"));
 
 builder.Services.AddIdentity<User, IdentityRole>(opt =>
 {

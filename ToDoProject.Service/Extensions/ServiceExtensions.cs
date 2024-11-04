@@ -10,6 +10,8 @@ using System.Reflection;
 using ToDoProject.Repository.Contexts;
 using ToDoProject.Repository.ToDos.Abstracts;
 using ToDoProject.Repository.ToDos.Concretes;
+using ToDoProject.Service.Authentication.Abstracts;
+using ToDoProject.Service.Authentication.Concretes;
 using ToDoProject.Service.Categories.Abstracts;
 using ToDoProject.Service.Categories.Concretes;
 using ToDoProject.Service.JWT.Abstracts;
@@ -29,7 +31,7 @@ public static class ServiceExtensions
         services.AddScoped<IToDoService, ToDoService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IJwtService,JwtService>();
-        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IAuthenticationServicee, AuthenticationServicee>();
         
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

@@ -10,7 +10,7 @@ using ToDoProject.Service.Users.Concretes;
 
 namespace ToDoProject.WebApi.Controllers;
 
-public class UsersController(IUserService userService , IAuthenticationService authService) : CustomBaseController
+public class UsersController(IUserService userService , IAuthenticationServicee authService) : CustomBaseController
 {
     [HttpGet("getbyemail")]
     public async Task<IActionResult> GetByEmail([FromQuery] string email) => CreateActionResult(await userService.GetByEmailAsync(email));

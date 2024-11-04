@@ -4,7 +4,7 @@ using ToDoProject.Model.Users.Dtos.Request;
 
 namespace ToDoProject.Service.Authentication.Abstracts;
 
-public interface IAuthenticationService
+public interface IAuthenticationServicee
 {
 
     Task<TokenResponseDto> RegisterByTokenAsync(RegisterRequestDto dto);

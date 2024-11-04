@@ -13,12 +13,12 @@ using ToDoProject.Service.Users.Abstracts;
 
 namespace ToDoProject.Service.Authentication.Concretes;
 
-public class AuthenticationService : IAuthenticationService
+public class AuthenticationServicee : IAuthenticationServicee
 {
     private readonly IUserService _userService;
     private readonly IJwtService _jwtService;
 
-    public AuthenticationService(IUserService userService, IJwtService jwtService)
+    public AuthenticationServicee(IUserService userService, IJwtService jwtService)
     {
         _userService = userService;
         _jwtService = jwtService;
