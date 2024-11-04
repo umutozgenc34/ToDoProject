@@ -12,7 +12,7 @@ using ToDoProject.Repository.Contexts;
 namespace ToDoProject.Repository.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20241103133535_init")]
+    [Migration("20241104121749_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -76,6 +76,9 @@ namespace ToDoProject.Repository.Migrations
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

@@ -7,6 +7,7 @@ using System;
 using ToDoProject.Repository.Categories.Abstracts;
 using ToDoProject.Repository.Categories.Concretes;
 using ToDoProject.Repository.Contexts;
+using ToDoProject.Repository.Interceptors;
 using ToDoProject.Repository.ToDos.Abstracts;
 using ToDoProject.Repository.ToDos.Concretes;
 using ToDoProject.Repository.UnitOfWorks.Abstracts;
@@ -28,6 +29,9 @@ public static class RepositoryExtensions
             {
                 sqlServerOptionsAction.MigrationsAssembly(typeof(RepositoryAssembly).Assembly.FullName);
             });
+
+            options.AddInterceptors(new AuditDbContextInterceptor());
+
         });
 
         services.AddScoped<IToDoRepository, ToDoRepository>();
