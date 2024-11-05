@@ -10,8 +10,8 @@ public record ToDoDto(
     string Description,
     DateTime StartDate,
     DateTime EndDate,
-    DateTime CreatedDate,
     Priority Priority,
     bool Completed,
-    int CategoryId
+    string CategoryName,
+    string UserUserName
 );

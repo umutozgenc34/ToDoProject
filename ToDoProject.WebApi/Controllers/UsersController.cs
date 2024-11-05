@@ -1,5 +1,6 @@
 ﻿
 using Core.Entities.ReturnModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ToDoProject.Model.Tokens.Dtos.Response;
@@ -9,7 +10,7 @@ using ToDoProject.Service.Users.Abstracts;
 using ToDoProject.Service.Users.Concretes;
 
 namespace ToDoProject.WebApi.Controllers;
-
+[Authorize]
 public class UsersController(IUserService userService ) : CustomBaseController
 {
     [HttpGet("getbyemail")]
@@ -23,7 +24,7 @@ public class UsersController(IUserService userService ) : CustomBaseController
         .UpdateAsync(id, request));
 
     [HttpPut("changepassword")]
-    public async Task<IActionResult> ChangePassword(string id, ChangePasswordRequestDto request) => CreateActionResult(await userService
+    public async Task<IActionResult> ChangePassword([FromQuery]string id, [FromBody]ChangePasswordRequestDto request) => CreateActionResult(await userService
         .ChangePasswordAsync(id, request));
 
 }

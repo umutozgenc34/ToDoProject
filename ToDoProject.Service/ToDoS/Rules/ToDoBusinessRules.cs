@@ -28,4 +28,13 @@ public class ToDoBusinessRules(IToDoRepository toDoRepository)
         }
         //return null;
     }
+
+    public void ToDoDoesNotExist(List<ToDo> toDos)
+    {
+        if (!toDos.Any())
+        {
+            throw new NotFoundException(Messages.NotFoundToDoByTitle);
+        }
+    }
+
 }

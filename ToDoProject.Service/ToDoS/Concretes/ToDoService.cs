@@ -2,6 +2,7 @@
 
 using AutoMapper;
 using Core.Entities.ReturnModels;
+using Core.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Net;
@@ -46,6 +47,24 @@ public class ToDoService(IToDoRepository toDoRepository,IUnitOfWork unitOfWork,I
         return ReturnModel.Success(HttpStatusCode.NoContent);
     }
 
+    public async Task<ReturnModel<List<ToDoDto>>> GetAllByTitleContainsAsync(string text)
+    {
+        var toDos = await toDoRepository.Where(x => x.Title.Contains(text)).ToListAsync();
+        businessRules.ToDoDoesNotExist(toDos);
+
+        var toDoAsDto = mapper.Map<List<ToDoDto>>(toDos);
+      
+        return ReturnModel<List<ToDoDto>>.Success(toDoAsDto);
+    }
+
+    public async Task<ReturnModel<List<ToDoDto>>> GetAllByUserIdAsync(string userId)
+    {
+        var toDos = await toDoRepository.Where(x=> x.User.Id == userId).ToListAsync();
+        businessRules.ToDoDoesNotExist(toDos);
+        var toDoAsDto = mapper.Map<List<ToDoDto>>(toDos);
+        return ReturnModel<List<ToDoDto>>.Success(toDoAsDto);
+    }
+
     public async Task<ReturnModel<List<ToDoDto>>> GetAllListAsync()
     {
         var toDos = await toDoRepository.GetAll().ToListAsync();
@@ -64,6 +83,15 @@ public class ToDoService(IToDoRepository toDoRepository,IUnitOfWork unitOfWork,I
         return ReturnModel<ToDoDto?>.Success(toDoAsDto);
     }
 
+    public async Task<ReturnModel<List<ToDoDto>>> GetFilterOwnTodosAsync(string userId, bool? completed = null)
+    {
+        var todos = await toDoRepository.Where(todo => todo.UserId == userId).ToListAsync();
+        todos = CheckCompleted(completed, todos);
+
+        var toDoAsDto = mapper.Map<List<ToDoDto>>(todos);
+        return ReturnModel<List<ToDoDto>>.Success(toDoAsDto);
+    }
+
     public async Task<ReturnModel> UpdateAsync(Guid id, UpdateToDoRequestDto request)
     {
         var toDo = await toDoRepository.GetByIdAsync(id);
@@ -80,4 +108,15 @@ public class ToDoService(IToDoRepository toDoRepository,IUnitOfWork unitOfWork,I
 
         return ReturnModel.Success(HttpStatusCode.NoContent);
     }
+
+    private List<ToDo> CheckCompleted(bool? completed, List<ToDo> todos)
+    {
+        if (completed.HasValue)
+        {
+            todos = todos.Where(todo => todo.Completed == completed.Value).ToList();
+        }
+
+        return todos;
+    }
+
 }

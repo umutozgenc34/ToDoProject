@@ -18,6 +18,9 @@ using ToDoProject.Service.Categories.Concretes;
 using ToDoProject.Service.Categories.Rules;
 using ToDoProject.Service.JWT.Abstracts;
 using ToDoProject.Service.JWT.Concretes;
+using ToDoProject.Service.Roles.Abstracts;
+using ToDoProject.Service.Roles.Concretes;
+using ToDoProject.Service.Roles.Rules;
 using ToDoProject.Service.ToDoS.Abstracts;
 using ToDoProject.Service.ToDoS.Concretes;
 using ToDoProject.Service.ToDoS.Rules;
@@ -36,11 +39,13 @@ public static class ServiceExtensions
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IJwtService,JwtService>();
         services.AddScoped<IAuthenticationServicee, AuthenticationServicee>();
+        services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<ToDoBusinessRules>();
         services.AddScoped<CategoryBusinessRules>();
         services.AddScoped<AuthenticationBusinessRules>();
         services.AddScoped<UserBusinessRules>();
-        
+        services.AddScoped<RoleBusinessRules>();
+
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         services.AddFluentValidationAutoValidation();

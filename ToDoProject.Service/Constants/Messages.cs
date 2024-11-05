@@ -16,4 +16,5 @@ public static class Messages
     public const string RoleAlreadyExistsMessage = "Rol benzersiz olmalıdır.";
     public const string RoleAddedMessage = "Rol eklendi.";
     public const string RoleAddedToUserMessage = "Kullanıcıya rol eklendi.";
+    public const string NotFoundToDoByTitle = "Başlığa ait yapılacaklar bulunamadı";
 }
