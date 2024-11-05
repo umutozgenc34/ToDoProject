@@ -10,29 +10,26 @@ using System.Threading.Tasks;
 using ToDoProject.Model.Users.Dtos.Request;
 using ToDoProject.Model.Users.Entity;
 using ToDoProject.Service.Users.Abstracts;
+using ToDoProject.Service.Users.Rules;
 
 namespace ToDoProject.Service.Users.Concretes;
 
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
-    public UserService(UserManager<User> userManager)
+    private readonly UserBusinessRules _userBusinessRules;
+    public UserService(UserManager<User> userManager, UserBusinessRules userBusinessRules)
     {
         _userManager = userManager;
+        _userBusinessRules = userBusinessRules;
     }
 
     public async Task<ReturnModel> ChangePasswordAsync(string id, ChangePasswordRequestDto request)
     {
         var user = await _userManager.FindByIdAsync(id);
-        if (user is null)
-        {
-            return ReturnModel.Fail("Idye ait user bulunamadı", HttpStatusCode.NotFound);
-        }
+        _userBusinessRules.CheckUserExists(user);
         var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
-        if (result.Succeeded is false)
-        {
-            return ReturnModel.Fail("Şifre yanlış");
-        }
+        _userBusinessRules.PasswordChangeSucceeded(result);
         
         return ReturnModel.Success(HttpStatusCode.OK);
     }
@@ -48,16 +45,14 @@ public class UserService : IUserService
             
         };
         var result = await _userManager.CreateAsync(user, request.Password);
+
         return ReturnModel<User>.Success(user,HttpStatusCode.Created);
     }
 
     public async Task<ReturnModel> DeleteAsync(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
-        if(user is null)
-        {
-            return ReturnModel.Fail("Idye ait kullanıcı bulunamadı");
-        }
+        _userBusinessRules.CheckUserExists(user);
         await _userManager.DeleteAsync(user);
 
         return ReturnModel.Success(HttpStatusCode.NoContent);
@@ -66,45 +61,34 @@ public class UserService : IUserService
     public async Task <ReturnModel<User>> GetByEmailAsync(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        if (user is null)
-        {
-            return ReturnModel<User>.Fail("Böyle bir kullanıcı bulunamadı",HttpStatusCode.NotFound);
-        }
+        _userBusinessRules.CheckUserExists(user);
+
         return ReturnModel<User>.Success(user);
     }
 
     public async Task<ReturnModel<User>> LoginAsync(LoginRequestDto request)
     {
         var userExist = await _userManager.FindByEmailAsync(request.Email);
-        if (userExist is null)
-        {
-            return ReturnModel<User>.Fail("Bu emaile ait bir kullanıcı yok", HttpStatusCode.NotFound);
-        }
+        _userBusinessRules.CheckUserExists(userExist);
+
         var result = await _userManager.CheckPasswordAsync(userExist, request.Password);
-        if (result is false)
-        {
-            return ReturnModel<User>.Fail("Hatalı Şifre");
-        }
+        _userBusinessRules.PasswordIsValid(result);
+
         return ReturnModel<User>.Success(userExist);
     }
 
     public async Task<ReturnModel> UpdateAsync(string id, UpdateRequestDto request)
     {
         var user = await _userManager.FindByIdAsync(id);
-        if(user is null)
-        {
-            return ReturnModel.Fail("Idye ait kullanıcı bulunamadı", HttpStatusCode.NotFound);
-        }
+        _userBusinessRules.CheckUserExists(user);
 
         user.UserName = request.Username;
         user.FirstName = request.FirstName;
         user.LastName = request.LastName;
 
         var result = await _userManager.UpdateAsync(user);
-        if (result.Succeeded is false)
-        {
-            return ReturnModel.Fail("Güncelleme Başarısız");
-        }
+        _userBusinessRules.UpdateIsSuccessful(result);
+
         return ReturnModel.Success(HttpStatusCode.NoContent);
 
     }

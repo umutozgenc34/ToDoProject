@@ -14,18 +14,16 @@ using ToDoProject.Model.ToDos.Entity;
 using ToDoProject.Repository.ToDos.Abstracts;
 using ToDoProject.Repository.UnitOfWorks.Abstracts;
 using ToDoProject.Service.ToDoS.Abstracts;
+using ToDoProject.Service.ToDoS.Rules;
 
 namespace ToDoProject.Service.ToDoS.Concretes;
 
-public class ToDoService(IToDoRepository toDoRepository,IUnitOfWork unitOfWork,IMapper mapper) : IToDoService
+public class ToDoService(IToDoRepository toDoRepository,IUnitOfWork unitOfWork,IMapper mapper,ToDoBusinessRules businessRules) : IToDoService
 {
     public async Task<ReturnModel<CreateToDoResponseDto>> CreateAsync(CreateToDoRequestDto request)
     {
         var anyTodo = await toDoRepository.Where(x=> x.Title == request.Title).AnyAsync();
-        if (anyTodo)
-        {
-            return ReturnModel<CreateToDoResponseDto>.Fail("ToDo ismi veritabanında bulunmaktadır");
-        }
+        businessRules.ToDoTitleDoesNotExist(anyTodo);
 
         var toDo = mapper.Map<ToDo>(request);
         await toDoRepository.AddAsync(toDo);
@@ -40,10 +38,7 @@ public class ToDoService(IToDoRepository toDoRepository,IUnitOfWork unitOfWork,I
     public async Task<ReturnModel> DeleteAsync(Guid id)
     {
         var toDo = await toDoRepository.GetByIdAsync(id);
-        if (toDo is null)
-        {
-            return ReturnModel.Fail("Silinecek task bulunamadı.", HttpStatusCode.NotFound);
-        }
+        businessRules.ToDoExists(toDo);
         
         toDoRepository.Delete(toDo);
         await unitOfWork.SaveChangesAsync();
@@ -62,10 +57,7 @@ public class ToDoService(IToDoRepository toDoRepository,IUnitOfWork unitOfWork,I
     public async Task<ReturnModel<ToDoDto?>> GetByIdAsync(Guid id)
     {
         var toDo = await toDoRepository.GetByIdAsync(id);
-        if (toDo is null)
-        {
-            return ReturnModel<ToDoDto?>.Fail("Kullanıcı Bulunamadı",HttpStatusCode.NotFound);
-        }
+        businessRules.ToDoExists(toDo);
 
         var toDoAsDto = mapper.Map<ToDoDto>(toDo);
         
@@ -75,17 +67,11 @@ public class ToDoService(IToDoRepository toDoRepository,IUnitOfWork unitOfWork,I
     public async Task<ReturnModel> UpdateAsync(Guid id, UpdateToDoRequestDto request)
     {
         var toDo = await toDoRepository.GetByIdAsync(id);
-        if(toDo is null)
-        {
-            return ReturnModel.Fail("ToDo bulunamadı", HttpStatusCode.NotFound);
-        }
+        businessRules.ToDoExists(toDo);
 
         var isToDoTitleExist = await toDoRepository.Where(x => x.Title == request.Title && x.Id != toDo.Id).AnyAsync();
 
-        if (isToDoTitleExist)
-        {
-            return ReturnModel.Fail("ToDo ismi veritabanında bulunmaktadır");
-        }
+        businessRules.ToDoTitleDoesNotExist(isToDoTitleExist);
 
         toDo = mapper.Map(request, toDo);
 

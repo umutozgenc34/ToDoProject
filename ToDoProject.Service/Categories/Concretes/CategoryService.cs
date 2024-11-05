@@ -10,10 +10,13 @@ using ToDoProject.Model.Categories.Entity;
 using ToDoProject.Repository.Categories.Abstracts;
 using ToDoProject.Repository.UnitOfWorks.Abstracts;
 using ToDoProject.Service.Categories.Abstracts;
+using ToDoProject.Service.Categories.Rules;
 
 namespace ToDoProject.Service.Categories.Concretes;
 
-public class CategoryService(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork, IMapper mapper) : ICategoryService
+public class CategoryService(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork,
+    IMapper mapper, CategoryBusinessRules businessRules) : ICategoryService
+
 {
     public async Task<ReturnModel<List<CategoryDto>>> GetAllAsync()
     {
@@ -25,10 +28,7 @@ public class CategoryService(ICategoryRepository categoryRepository, IUnitOfWork
     public async Task<ReturnModel<CategoryDto>> GetByIdAsync(int id)
     {
         var category = await categoryRepository.GetByIdAsync(id);
-        if (category is null)
-        {
-            ReturnModel<CategoryDto>.Fail("Kategori Bulunamadı",HttpStatusCode.NotFound);
-        }
+        businessRules.CategoryExists(category);
 
         var categoryAsDto = mapper.Map<CategoryDto>(category);
 
@@ -38,10 +38,7 @@ public class CategoryService(ICategoryRepository categoryRepository, IUnitOfWork
     public async Task<ReturnModel<CategoryWithTodosDto>> GetCategoryWithToDosAsync(int categoryId)
     {
         var category = await categoryRepository.GetCategoryWithTodosAsync(categoryId);
-        if (category == null)
-        {
-            return ReturnModel<CategoryWithTodosDto>.Fail("Kullanıcı bulunamadı", HttpStatusCode.NotFound);
-        }
+        businessRules.CategoryExists(category);
 
         var categoryAsDto = mapper.Map<CategoryWithTodosDto>(category);
 
@@ -59,10 +56,7 @@ public class CategoryService(ICategoryRepository categoryRepository, IUnitOfWork
     public async Task<ReturnModel<int>> CreateAsync(CreateCategoryRequestDto request)
     {
         var anyCategory = await categoryRepository.Where(x => x.Name == request.Name).AnyAsync();
-        if (anyCategory)
-        {
-            return ReturnModel<int>.Fail("Categori ismi veritabanında bulunmamaktadır", HttpStatusCode.NotFound);
-        }
+        businessRules.CategoryNameDoesNotExist(anyCategory);
 
         var newCategory = mapper.Map<Category>(request);
         await categoryRepository.AddAsync(newCategory);
@@ -74,10 +68,7 @@ public class CategoryService(ICategoryRepository categoryRepository, IUnitOfWork
     public async Task<ReturnModel> DeleteAsync(int id)
     {
         var category = await categoryRepository.GetByIdAsync(id);
-        if (category is null)
-        {
-            return ReturnModel.Fail("Kategori bulunamadı", HttpStatusCode.NotFound);
-        }
+        businessRules.CategoryExists(category);
 
         categoryRepository.Delete(category);
         await unitOfWork.SaveChangesAsync();
@@ -88,16 +79,10 @@ public class CategoryService(ICategoryRepository categoryRepository, IUnitOfWork
     public async Task<ReturnModel> UpdateAsync(int id, UpdateCategoryRequestDto request)
     {
         var category = await categoryRepository.GetByIdAsync(id);
-        if (category is null)
-        {
-            return ReturnModel.Fail("Böyle bir kategori bulunamadı", HttpStatusCode.NotFound);
-        }
+        businessRules.CategoryExists(category);
 
         var isCategoryNameExist = await categoryRepository.Where(x => x.Name == request.Name && x.Id != category.Id).AnyAsync();
-        if (isCategoryNameExist)
-        {
-            return ReturnModel.Fail("Category veritabanında bulunmaktadır", HttpStatusCode.BadRequest);
-        }
+        businessRules.CategoryNameDoesNotExist(isCategoryNameExist);
 
         category = mapper.Map(request, category);
 

@@ -10,7 +10,7 @@ using ToDoProject.Service.Users.Concretes;
 
 namespace ToDoProject.WebApi.Controllers;
 
-public class UsersController(IUserService userService , IAuthenticationServicee authService) : CustomBaseController
+public class UsersController(IUserService userService ) : CustomBaseController
 {
     [HttpGet("getbyemail")]
     public async Task<IActionResult> GetByEmail([FromQuery] string email) => CreateActionResult(await userService.GetByEmailAsync(email));
@@ -25,22 +25,5 @@ public class UsersController(IUserService userService , IAuthenticationServicee 
     [HttpPut("changepassword")]
     public async Task<IActionResult> ChangePassword(string id, ChangePasswordRequestDto request) => CreateActionResult(await userService
         .ChangePasswordAsync(id, request));
-
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateUser([FromBody] RegisterRequestDto request)
-    {
-        var tokenResponse = await authService.RegisterByTokenAsync(request);
-        var response = ReturnModel<TokenResponseDto>.Success(tokenResponse);
-        return CreateActionResult(response);
-    }
-
-    [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
-    {
-        var tokenResponse = await authService.LoginByTokenAsync(request);
-        var response = ReturnModel<TokenResponseDto>.Success(tokenResponse);
-        return CreateActionResult(response);
-    }
-
 
 }
