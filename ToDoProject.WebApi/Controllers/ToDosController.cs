@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ToDoProject.Model.ToDos.Dtos.Create.Request;
 using ToDoProject.Model.ToDos.Dtos.Update;
@@ -6,7 +7,7 @@ using ToDoProject.Service.ToDoS.Abstracts;
 
 namespace ToDoProject.WebApi.Controllers
 {
-   
+    [Authorize]
     public class ToDosController(IToDoService toDoService) :  CustomBaseController
     {
         [HttpGet]

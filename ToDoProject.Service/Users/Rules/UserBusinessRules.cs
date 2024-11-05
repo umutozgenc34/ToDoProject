@@ -3,6 +3,7 @@
 using Core.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using ToDoProject.Model.Users.Entity;
+using ToDoProject.Service.Constants;
 
 namespace ToDoProject.Service.Users.Rules;
 
@@ -12,7 +13,7 @@ public class UserBusinessRules
     {
         if (user is null)
         {
-            throw new NotFoundException("Kullanıcı bulunamadı.");
+            throw new NotFoundException(Messages.UserNotFountMessage);
         }
     }
 
@@ -20,7 +21,7 @@ public class UserBusinessRules
     {
         if (!result.Succeeded)
         {
-            throw new BusinessException("Şifre değişikliği başarısız");
+            throw new BusinessException(Messages.PasswordChangeUnsuccesfullMessage);
         }
     }
 
@@ -28,7 +29,7 @@ public class UserBusinessRules
     {
         if (!passwordCheck)
         {
-            throw new CriticalException("Hatalı şifre.");
+            throw new CriticalException(Messages.WrongPasswordMessage);
         }
     }
 
@@ -36,7 +37,7 @@ public class UserBusinessRules
     {
         if (!result.Succeeded)
         {
-            throw new BusinessException("Kullanıcı güncelleme işlemi başarısız.");
+            throw new BusinessException(Messages.UserUpdateUnsuccesfullMessage);
         }
     }
 

@@ -3,6 +3,7 @@
 using Core.Exceptions;
 using ToDoProject.Model.Users.Dtos.Request;
 using ToDoProject.Model.Users.Entity;
+using ToDoProject.Service.Constants;
 
 namespace ToDoProject.Service.Authentication.Rules;
 
@@ -12,7 +13,7 @@ public class AuthenticationBusinessRules
     {
         if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
         {
-            throw new BusinessException("Email veya şifre boş olamaz.");
+            throw new BusinessException(Messages.ValidateAuthenticationMessage);
         }
     }
 
@@ -20,7 +21,7 @@ public class AuthenticationBusinessRules
     {
         if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
         {
-            throw new BusinessException("Email veya şifre boş olamaz.");
+            throw new BusinessException(Messages.ValidateAuthenticationMessage);
         }
 
     }
