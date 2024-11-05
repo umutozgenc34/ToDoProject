@@ -12,4 +12,8 @@ public static class Messages
     public const string PasswordChangeUnsuccesfullMessage = "Şifre değişimi başarısız";
     public const string WrongPasswordMessage = "Hatalı şifre";
     public const string UserUpdateUnsuccesfullMessage = "Kullanıcı güncelleme işlemi başarısız";
+    public const string RoleNotFoundMessage = "Rol bulunamadı.";
+    public const string RoleAlreadyExistsMessage = "Rol benzersiz olmalıdır.";
+    public const string RoleAddedMessage = "Rol eklendi.";
+    public const string RoleAddedToUserMessage = "Kullanıcıya rol eklendi.";
 }

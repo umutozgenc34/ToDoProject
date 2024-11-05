@@ -20,5 +20,8 @@ public class ToDoConfiguration : IEntityTypeConfiguration<ToDo>
             .WithMany(c => c.ToDos)
             .HasForeignKey(x => x.CategoryId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Navigation(x => x.User).AutoInclude();
+        builder.Navigation(x => x.Category).AutoInclude();
     }
 }

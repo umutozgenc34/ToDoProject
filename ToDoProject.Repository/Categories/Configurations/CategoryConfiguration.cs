@@ -17,5 +17,8 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .WithOne(x => x.Category)
             .HasForeignKey(x => x.CategoryId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Navigation(x => x.ToDos).AutoInclude();
+        
     }
 }
