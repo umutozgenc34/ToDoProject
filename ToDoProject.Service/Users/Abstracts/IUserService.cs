@@ -14,5 +14,6 @@ public interface IUserService
     Task<ReturnModel> DeleteAsync(string id);
     Task<ReturnModel> UpdateAsync(string id , UpdateRequestDto request);
     Task<ReturnModel> ChangePasswordAsync(string id, ChangePasswordRequestDto request);
+    Task<ReturnModel<List<User>>> GetAllAsync();
 
 }

@@ -51,7 +51,7 @@ namespace ToDoProject.WebApi.Controllers
         [HttpGet("owntodoscompletefilter")]
         public async Task<IActionResult> OwnTodos([FromQuery] bool? completed = null)
         {
-            
+
             string userId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
             if (string.IsNullOrEmpty(userId))
@@ -59,11 +59,11 @@ namespace ToDoProject.WebApi.Controllers
                 return Unauthorized("Kullanıcı bulunamadı.");
             }
 
-            
+
             return CreateActionResult(await toDoService.GetFilterOwnTodosAsync(userId, completed));
 
-            
-            
+
+
         }
 
 

@@ -58,6 +58,12 @@ public class UserService : IUserService
         return ReturnModel.Success(HttpStatusCode.NoContent);
     }
 
+    public async Task<ReturnModel<List<User>>> GetAllAsync()
+    {
+        var users = await _userManager.GetUsersInRoleAsync("User");
+        return ReturnModel<List<User>>.Success((List<User>)users);
+    }
+
     public async Task <ReturnModel<User>> GetByEmailAsync(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);

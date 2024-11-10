@@ -26,5 +26,7 @@ public class UsersController(IUserService userService ) : CustomBaseController
     [HttpPut("changepassword")]
     public async Task<IActionResult> ChangePassword([FromQuery]string id, [FromBody]ChangePasswordRequestDto request) => CreateActionResult(await userService
         .ChangePasswordAsync(id, request));
+    //[Authorize(Roles = "Admin,SuperAdmin")]
+    //public async Task<IActionResult> GetAllUsers() => CreateActionResult(await userService.GetAllAsync());
 
 }
